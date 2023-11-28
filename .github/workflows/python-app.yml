@@ -1,0 +1,36 @@
+name: Splitwise-YNAB Sync
+
+on:
+  schedule:
+    - cron: '30 23 * * *'
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout branch
+      uses: actions/checkout@v3
+      with:
+        ref: main  # branch
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: Run main.py
+      env:
+        sw_consumer_key: ${{ secrets.sw_consumer_key }}
+        sw_consumer_secret: ${{ secrets.sw_consumer_secret }}
+        sw_api_key: ${{ secrets.sw_api_key }}
+        ynab_personal_access_token: ${{ secrets.ynab_personal_access_token }}
+        ynab_budget_name: ${{ vars.ynab_budget_name }}
+        ynab_account_name: ${{ vars.ynab_account_name }}
+      run: python main.py
