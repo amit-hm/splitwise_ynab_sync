@@ -1,5 +1,4 @@
 from splitwise import Splitwise
-import webbrowser
 import yaml
 
 # https://github.com/namaggarwal/splitwise

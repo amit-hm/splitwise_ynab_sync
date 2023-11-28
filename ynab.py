@@ -1,7 +1,6 @@
 # https://github.com/deanmcgregor/ynab-python
 import requests
 import yaml
-import webbrowser
 
 class YNABClient:
     BASE_URL = "https://api.youneedabudget.com/v1"
