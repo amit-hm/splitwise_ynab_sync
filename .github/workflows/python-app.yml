@@ -2,7 +2,7 @@ name: Splitwise-YNAB Sync
 
 on:
   schedule:
-    - cron: '30 23 * * *'
+    - cron: '0 0 * * *'
   workflow_dispatch:  # Manual trigger
 
 jobs:
