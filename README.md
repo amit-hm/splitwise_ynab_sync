@@ -24,4 +24,4 @@ This repo moves transactions from Splitwise to YNAB.
 
 The Github Actions now triggers this code repo at `00:00 UTC` everyday and transfers transactions from Splitwise to YNAB.
 
-If you would like to change the schedule time, change the cron expression in [python-app.yaml](https://github.com/amit-hm/splitwise_ynab_sync/blob/main/.github/workflows/python-app.yml) file.
+If you would like to change the schedule time, change the cron expression in [python-app.yaml](.github/workflows/python-app.yml) file.
