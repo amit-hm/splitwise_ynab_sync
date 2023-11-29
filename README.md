@@ -14,7 +14,7 @@ Yes. Since you will be deploying your own Github Actions to deploy, you will be 
 ## Setup
 This repo moves transactions from Splitwise to YNAB.
 
-1. Go to your YNAB budget ([YNAB](https://app.youneedabudget.com/)) and create a new account named `Splitwise`.
+1. Go to your YNAB budget ([YNAB](https://app.youneedabudget.com/)) and create a new account named `Splitwise`. This is where the imported transactions will flow into.
 2. Collect Credentials from YNAB and Splitwise:
 
     YNAB:
