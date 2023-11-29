@@ -5,12 +5,12 @@ This repo moves transactions from Splitwise to YNAB.
 1. Collect Credentials from YNAB and Splitwise:
 
     YNAB:
-     - Go to [YNAB Developer Settings](https://app.ynab.com/settings/developer)
+     - Go to <a href="https://app.ynab.com/settings/developer" target="_blank">YNAB Developer Settings</a>
      - Create a new `Personal Access Token`.
      - Save that in a safe place as you won't be able to access it again.
     
     Splitwise:
-    - Go to [Splitwise Apps](https://secure.splitwise.com/apps)
+    - Go to <a href="https://secure.splitwise.com/apps" target="_blank">Splitwise Apps</a>
     - Click on `Register your application`
     - Fill `application name` (YNAB_Splitwise_sync), `description` and `Homepage URL` (http://api-example.splitwise.com/) and click on `Register and API key`
     - Copy `Consumer Key`, `Consumer Secret` and `API keys`.
@@ -23,4 +23,4 @@ This repo moves transactions from Splitwise to YNAB.
 
 The Github Actions now triggers this code repo at `00:00 UTC` everyday and transfers transactions from Splitwise to YNAB.
 
-If you would like to change the schedule time, change the cron expression in `.github/workflows/python-app.yml` file.
+If you would like to change the schedule time, change the cron expression in <a href="https://github.com/amit-hm/splitwise_ynab_sync/blob/main/.github/workflows/python-app.yml" target="_blank">python-app.yaml</a> file.
