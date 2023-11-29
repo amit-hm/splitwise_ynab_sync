@@ -3,7 +3,7 @@
 ## What does it do?
 The code automates the process of importing transactions from Splitwise into your YNAB budget.By following instructions below, you can automate to run it daily using Github Actions. So, your Splitwise transactions will be imported everyday just like your other automated accounts.
 
-## Which transactions are imprted?
+## Which transactions are imported?
 The code imports all the **transactions for which you owe money**.
 
 Note: By design, there is one delay in importing transactions i.e. if you run the code today, it will get all transactions through yesterday and not today. This is because YNAB does not have timestamp information with their dates.
