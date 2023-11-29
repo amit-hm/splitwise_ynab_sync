@@ -1,8 +1,16 @@
 # splitwise_ynab_sync
 
+# What does it do?
+The code automates the process of importing transactions from Splitwise into your YNAB budget.By following instructions below, you can automate to run it daily. So, your Splitwise transactions will be imported everyday just like your other automated accounts.
+
+# Which transactions are imprted?
+The code imports all the transactions where you owe money.
+Note: By design, there is one delay in importing transactions i.e. if you run the code today, it will get all transactions through yesterday and not today. This is because YNAB does not have timestamp information with their dates.
+
+# Setup
 This repo moves transactions from Splitwise to YNAB.
 
-1. Go to [YNAB](https://app.youneedabudget.com/) and create a new account named `Splitwise`.
+1. Go to your YNAB budget ([YNAB](https://app.youneedabudget.com/)) and create a new account named `Splitwise`.
 2. Collect Credentials from YNAB and Splitwise:
 
     YNAB:
