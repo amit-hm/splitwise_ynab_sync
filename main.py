@@ -1,21 +1,11 @@
-import yaml
 import pandas as pd
 from datetime import datetime, timedelta
 import os
 
 from sw import SW
 from ynab import YNABClient
-
-def setup_environment_vars():
-    # Check if running in GitHub Actions
-    if os.getenv('GITHUB_ACTIONS'):
-        return
-
-    # for local development
-    with open('creds.yaml', 'r') as file:
-        secrets = yaml.safe_load(file)
-        for key, value in secrets.items():
-            os.environ[key] = value
+from utils import setup_environment_vars
+from datetime import datetime, timezone
 
 class ynab_splitwise_transfer():
     def __init__(self, sw_consumer_key, sw_consumer_secret,sw_api_key, 
@@ -26,63 +16,34 @@ class ynab_splitwise_transfer():
         self.ynab_budget_id = self.ynab.get_budget_id(ynab_budget_name)
         self.ynab_account_id = self.ynab.get_account_id(self.ynab_budget_id, ynab_account_name)
 
-    def sw_to_ynab_csv(self, dated_after):
-        # import from splitwise
-        expenses = self.sw.get_expenses(dated_after=dated_after)
-        print(f"Writing {len(expenses)} expenses to csv file.")
-
-        # convert to dataframe
-        df = pd.DataFrame(expenses)
-        df.rename(columns={'owed': 'Amount','date':'Date','description':'Memo'}, inplace=True)
-        df['Payee'] = None
-        df = df[['Date','Payee','Memo','Amount']]
-
-        # write to a csv file
-        df.to_csv("output.csv", index=False)
-        print("Output file written")
-
-    def get_YNAB_last_transaction_date(self):
-        return self.ynab.get_last_transaction(self.ynab_budget_id, self.ynab_account_id)['date']
-    
-    def get_YNAB_last_transaction(self):
-        return self.ynab.get_last_transaction(self.ynab_budget_id, self.ynab_account_id)
-
     def sw_to_ynab(self):
-        # get last transaction date from YNAB
-        last_transaction_date = self.get_YNAB_last_transaction_date()
-        print(f"Last transaction on YNAB: {last_transaction_date}")
-        last_transaction_date = datetime.strptime(last_transaction_date, "%Y-%m-%d")
-        dated_after = last_transaction_date + timedelta(days=1)     # this date is included
-        dated_before = datetime.now().date()    # this date is NOT included
+        now = datetime.now(timezone.utc)
+        todays_midnight = datetime(now.year, now.month, now.day)
+        yesterdays_midnight = todays_midnight - timedelta(days=1)
 
-        dated_after_str = dated_after.strftime('%Y-%m-%d')
-        dated_before_str = dated_before.strftime('%Y-%m-%d')
-
-        print(f"Getting transactions from {dated_after_str} to {dated_before_str} (end date not included)...")
-
-        if dated_after_str == dated_before_str:
-            print("No transactions to write to YNAB.")
-            return
-
-        # import from splitwise
-        expenses = self.sw.get_expenses(dated_after=dated_after, dated_before=dated_before)
+        expenses = self.sw.get_expenses(dated_after=yesterdays_midnight, dated_before=todays_midnight)
 
         if expenses:
             # process
             ynab_transactions = []
             for expense in expenses:
+                # don't import deleted expenses
+                if expense['deleted_time']:
+                    continue
                 transaction = {
                                 "account_id": self.ynab_account_id,
                                 "date":expense['date'],
                                 "amount":-int(expense['owed']*1000),
-                                "memo":expense['description'],
+                                "memo":expense['description'],  # add other users
                                 "cleared": "cleared"
                             }
                 ynab_transactions.append(transaction)
-
             # export to ynab
-            print(f"Writing {len(ynab_transactions)} record(s) to YNAB.")
-            response = self.ynab.create_transaction(self.ynab_budget_id, ynab_transactions)
+            if ynab_transactions:
+                print(f"Writing {len(ynab_transactions)} record(s) to YNAB.")
+                response = self.ynab.create_transaction(self.ynab_budget_id, ynab_transactions)
+            else:
+                print("No transactions to write to YNAB.")
         else:
             print("No transactions to write to YNAB.")
 

@@ -1,5 +1,6 @@
 from splitwise import Splitwise
-import yaml
+import os
+from utils import setup_environment_vars
 
 # https://github.com/namaggarwal/splitwise
 
@@ -29,6 +30,9 @@ class SW():
                     if paid == 0 and description.strip() != 'Payment':
                         owed_expense['owed'] = float(user.getOwedShare())
                         owed_expense['date'] = expense.getDate()
+                        owed_expense['created_time'] = expense.getCreatedAt()
+                        owed_expense['updated_time'] = expense.getUpdatedAt()
+                        owed_expense['deleted_time'] = expense.getDeletedAt()
                         owed_expense['description'] = description
                         owed_expense['cost'] = float(expense.getCost())
                 else:
@@ -40,18 +44,14 @@ class SW():
 
 
 if __name__ == "__main__":
-    # read creds file
-    with open("creds.yaml", 'r') as stream:
-        try:
-            data = yaml.safe_load(stream)
-        except yaml.YAMLError as exc:
-            print(exc)
+    # load environment variables from yaml file (locally)
+    setup_environment_vars()
     
     # splitwise creds
-    consumer_key = data['splitwise']['consumer_key']
-    consumer_secret = data['splitwise']['consumer_secret']
-    api_key = data['splitwise']['api_key']
+    consumer_key = os.environ.get('sw_consumer_key')
+    consumer_secret = os.environ.get('sw_consumer_secret')
+    api_key = os.environ.get('sw_api_key')
 
     a = SW(consumer_key, consumer_secret, api_key)
-    e = a.get_expenses(dated_after="2023-11-10")
+    e = a.get_expenses(dated_after="2023-11-29", dated_before="2023-12-01")
     print(e)
