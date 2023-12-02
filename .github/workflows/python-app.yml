@@ -2,7 +2,7 @@ name: Splitwise-YNAB Sync
 
 on:
   schedule:
-    - cron: '22 3 * * *'    # h >= 12 as UTC ranges from -12 to +14
+    - cron: '0 12 * * *'    # h >= 12 as UTC ranges from -12 to +14
   workflow_dispatch:  # Manual trigger
 
 jobs:
