@@ -1,6 +1,7 @@
 # https://github.com/deanmcgregor/ynab-python
 import requests
-import yaml
+import os
+from utils import setup_environment_vars
 
 class YNABClient:
     BASE_URL = "https://api.youneedabudget.com/v1"
@@ -83,17 +84,13 @@ class YNABClient:
 
 
 if __name__ == "__main__":
-    # read creds file
-    with open("creds.yaml", 'r') as stream:
-        try:
-            data = yaml.safe_load(stream)
-        except yaml.YAMLError as exc:
-            print(exc)
+    # load environment variables from yaml file (locally)
+    setup_environment_vars()
 
     # ynab creds
-    ynab_budget_name = data['ynab']['budget_name']
-    ynab_account_name = data['ynab']['account_name']
-    personal_access_token = data['ynab']['personal_access_token']
+    ynab_budget_name = os.environ.get('ynab_budget_name')
+    ynab_account_name = os.environ.get('ynab_account_name')
+    personal_access_token = os.environ.get('ynab_personal_access_token')
 
     client = YNABClient(personal_access_token)
 
@@ -127,3 +124,5 @@ if __name__ == "__main__":
 
     t = client.get_last_transaction(budget_id, account_id)
     print(t)
+    # transactions = client.get_transactions(budget_id, account_id, since_date="2023-11-28")
+    # print(transactions)
