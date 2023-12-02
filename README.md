@@ -34,6 +34,6 @@ This repo moves transactions from Splitwise to YNAB.
     - Under `Variables` tab, using `New repository variable`, add `YNAB_BUDGET_NAME` (your YNAB budget name) and `YNAB_ACCOUNT_NAME` (created in step 1).
 
 
-The Github Actions now triggers this code repo at `00:00 UTC` everyday and transfers transactions from Splitwise to YNAB.
+The Github Actions now triggers this code repo at `12:00 UTC` everyday and transfers previous day's transactions from Splitwise to YNAB.
 
 If you would like to change the schedule time, change the cron expression in [python-app.yaml](.github/workflows/python-app.yml) file.
