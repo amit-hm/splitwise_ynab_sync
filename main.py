@@ -17,6 +17,15 @@ class ynab_splitwise_transfer():
         self.ynab_account_id = self.ynab.get_account_id(self.ynab_budget_id, ynab_account_name)
 
     def sw_to_ynab(self):
+        def combine_names(string_list):
+            if not string_list:
+                return ""
+
+            if len(string_list) == 1:
+                return string_list[0]
+
+            return ', '.join(string_list[:-1]) + ' and ' + string_list[-1]
+        
         now = datetime.now(timezone.utc)
         todays_midnight = datetime(now.year, now.month, now.day)
         yesterdays_midnight = todays_midnight - timedelta(days=1)
@@ -34,7 +43,7 @@ class ynab_splitwise_transfer():
                                 "account_id": self.ynab_account_id,
                                 "date":expense['date'],
                                 "amount":-int(expense['owed']*1000),
-                                "memo":expense['description'],  # add other users
+                                "memo":expense['description'] + "with " + combine_names(expense['users']),
                                 "cleared": "cleared"
                             }
                 ynab_transactions.append(transaction)
