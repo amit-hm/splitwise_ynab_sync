@@ -38,7 +38,7 @@ This repo moves transactions from Splitwise to YNAB.
 4. Add the Credentials on Github Actions:
     - Go to the `Settings` tab, then `Secrets and variables` > `Actions`
     - Under `Secrets` tab, using `New repository secret`, you need to add 4 Name-Secret pairs:
-        - Name: `YNAB_PERSONAL_ACCESS_TOKEN`, Secret: `API keys` from 2a.
+        - Name: `YNAB_PERSONAL_ACCESS_TOKEN`, Secret: `Personal Access Token` from 2a.
         - Name: `SW_API_KEY`, Secret: `API keys` from 2b.
         - Name: `SW_CONSUMER_KEY`, Secret: `Consumer Key` from 2b.
         - Name: `SW_CONSUMER_SECRET`, Secret: `Consumer Secret` from 2b.
