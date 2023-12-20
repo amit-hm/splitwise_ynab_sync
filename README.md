@@ -27,7 +27,7 @@ This repo moves transactions from Splitwise to YNAB.
     a. YNAB:
      - Go to [YNAB Developer Settings](https://app.ynab.com/settings/developer)
      - Create a new `Personal Access Token`.
-     - Save that in a safe place as you won't be able to access it again.
+     - You will see the token at the top of page, save that in a safe place as you won't be able to access it again.
     
     b. Splitwise:
     - Go to [Splitwise Apps](https://secure.splitwise.com/apps)
