@@ -16,7 +16,7 @@ That said, I would to mention my workflow:
 The code imports all the **transactions for which you owe money**.
 
 ## Is it free?
-Yes. Since you will be deploying your own Github Actions to deploy, you will be using just around 15 minutes from the [free 2000 minutes per month](https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions).
+Yes. Since you will be deploying your own Github Actions to deploy, you will be using just around 15 minutes from the [free 2000 minutes per month](https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions#included-storage-and-minutes).
 
 ## Setup
 This repo moves transactions from Splitwise to YNAB.
