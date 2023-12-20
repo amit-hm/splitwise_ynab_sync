@@ -24,21 +24,27 @@ This repo moves transactions from Splitwise to YNAB.
 1. Go to your YNAB budget ([YNAB](https://app.youneedabudget.com/)) and create a new account named `Splitwise`. This is where the imported transactions will flow into.
 2. Collect Credentials from YNAB and Splitwise:
 
-    YNAB:
+    a. YNAB:
      - Go to [YNAB Developer Settings](https://app.ynab.com/settings/developer)
      - Create a new `Personal Access Token`.
      - Save that in a safe place as you won't be able to access it again.
     
-    Splitwise:
+    b. Splitwise:
     - Go to [Splitwise Apps](https://secure.splitwise.com/apps)
     - Click on `Register your application`
     - Fill `application name` (YNAB_Splitwise_sync), `description` and `Homepage URL` (http://api-example.splitwise.com/) and click on `Register and API key`
     - Copy `Consumer Key`, `Consumer Secret` and `API keys`.
-3. Fork this repo.
+3. Fork this repo. (by clicking on the 'Fork' option on the top of this page.)
 4. Add the Credentials on Github Actions:
     - Go to the `Settings` tab, then `Secrets and variables` > `Actions`
-    - Under `Secrets` tab, using `New repository secret`, add `SW_API_KEY`, `SW_CONSUMER_KEY`, `SW_CONSUMER_SECRET` and `YNAB_PERSONAL_ACCESS_TOKEN` (collected in step 1).
-    - Under `Variables` tab, using `New repository variable`, add `YNAB_BUDGET_NAME` (your YNAB budget name) and `YNAB_ACCOUNT_NAME` (created in step 1).
+    - Under `Secrets` tab, using `New repository secret`, you need to add 4 Name-Secret pairs:
+        - Name: `YNAB_PERSONAL_ACCESS_TOKEN`, Secret: `API keys` from 2a.
+        - Name: `SW_API_KEY`, Secret: `API keys` from 2b.
+        - Name: `SW_CONSUMER_KEY`, Secret: `Consumer Key` from 2b.
+        - Name: `SW_CONSUMER_SECRET`, Secret: `Consumer Secret` from 2b.
+    - Similarly, Under `Variables` tab, using `New repository variable`, add:
+        - Name: `YNAB_BUDGET_NAME`, Value: your YNAB budget name (check your YNAB app or website, if you don't know, fill 'My Budget')
+        - Name: `YNAB_ACCOUNT_NAME`, Value: 'Splitwise' (created in step 1).
 
 
 The Github Actions now triggers this code repo at `12:00 UTC` everyday and transfers previous day's transactions from Splitwise to YNAB.
