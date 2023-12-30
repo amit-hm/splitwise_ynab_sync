@@ -21,6 +21,7 @@ class SW():
             owed_expense = {}
             users = expense.getUsers()
             user_names = []
+            expense_cost = float(expense.getCost())
 
             for user in users:
                 user_first_name = user.getFirstName()
@@ -34,9 +35,13 @@ class SW():
                         owed_expense['updated_time'] = expense.getUpdatedAt()
                         owed_expense['deleted_time'] = expense.getDeletedAt()
                         owed_expense['description'] = description
-                        owed_expense['cost'] = float(expense.getCost())
-                else:
-                    user_names.append(user_first_name)      # get user names other than current_user
+                        owed_expense['cost'] = expense_cost
+                else:       # get user names other than current_user
+                    paid_share = float(user.getPaidShare())
+                    if paid_share == expense_cost:
+                        user_names.append("[" + user_first_name + "]")
+                    else:
+                        user_names.append(user_first_name)
             if paid == 0 and description.strip() != 'Payment':      # check category instead of description
                 owed_expense['users'] = user_names
                 owed_expenses.append(owed_expense)
