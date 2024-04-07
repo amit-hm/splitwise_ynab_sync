@@ -50,3 +50,7 @@ This repo moves transactions from Splitwise to YNAB.
 The Github Actions now triggers this code repo at `12:00 UTC` everyday and transfers previous day's transactions from Splitwise to YNAB.
 
 If you would like to change the schedule time, change the cron expression in [python-app.yaml](.github/workflows/python-app.yml) file.
+
+
+## Bugfixes
+1. Apr 6, 2024: fixed the `UnboundLocalError: local variable 'paid' referenced before assignment` error.
