@@ -54,3 +54,15 @@ If you would like to change the schedule time, change the cron expression in [py
 
 ## Bugfixes
 1. Apr 6, 2024: fixed the `UnboundLocalError: local variable 'paid' referenced before assignment` error.
+
+### How to keep your repo updated to this repo?
+1. On your forked repo, you would see something like `This branch is X commits behind amit-hm/splitwise_yanb_sync:main`.
+2. Click on `Sync fork`.
+3. Click on `Update branch`.
+   This should update your forked repo to this repo and hence bring in those new bugfixes or features.
+
+# NOTE
+Github Actions, unfortunately, deactivates after 60 days of inactivity. So, you might have to manually enable the workflow again every 60 days.
+
+
+Contact me at devsama42@gmail.com
