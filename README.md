@@ -59,6 +59,7 @@ If you would like to change the schedule time, change the cron expression in [py
 1. On your forked repo, you would see something like `This branch is X commits behind amit-hm/splitwise_yanb_sync:main`.
 2. Click on `Sync fork`.
 3. Click on `Update branch`.
+
    This should update your forked repo to this repo and hence bring in those new bugfixes or features.
 
 # NOTE
