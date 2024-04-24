@@ -1,4 +1,6 @@
 from splitwise import Splitwise
+from splitwise.expense import Expense
+from splitwise.user import ExpenseUser
 import os
 from utils import setup_environment_vars
 
@@ -11,7 +13,19 @@ class SW():
 
         self.limit = 100
         self.current_user = self.sw.getCurrentUser().getFirstName()
-        print("Current User: ", self.current_user)
+        self.current_user_id = self.sw.getCurrentUser().getId()
+
+    def get_friends(self):
+        friends_fullnames = []
+        friends_ids = []
+        for friend in self.sw.getFriends():
+            id = friend.getId()
+            full_name = friend.getFirstName()
+            if friend.getLastName() is not None:
+                full_name = " ".join([full_name, friend.getLastName()])
+            friends_fullnames.append(full_name)
+            friends_ids.append(id)
+        return friends_fullnames, friends_ids
 
     def get_expenses(self, dated_before=None, dated_after=None):
         # get all expenses between 2 dates
@@ -48,6 +62,27 @@ class SW():
                 owed_expense['users'] = user_names
                 owed_expenses.append(owed_expense)
         return owed_expenses
+    
+    def create_expense(self, expense):
+        e = Expense()
+        e.setCost(expense['cost'])
+        e.setDate(expense['date'])
+        e.setDescription(expense['description'])
+
+        users = []
+        for user in expense['users']:
+            u = ExpenseUser()
+            u.setId(user['id'])
+            u.setPaidShare(user['paid'])
+            u.setOwedShare(user['owed'])
+
+            users.append(u)
+
+        e.setUsers(users)
+        expense, errors = self.sw.createExpense(e)
+        if errors:
+            print(errors.getErrors())
+        return expense, errors
 
 
 if __name__ == "__main__":
@@ -60,5 +95,7 @@ if __name__ == "__main__":
     api_key = os.environ.get('sw_api_key')
 
     a = SW(consumer_key, consumer_secret, api_key)
-    e = a.get_expenses(dated_after="2023-11-29", dated_before="2023-12-01")
-    print(e)
+    # e = a.get_expenses(dated_after="2023-11-29", dated_before="2023-12-01")
+    
+    a.create_expense()
+    # a.get_friends()
