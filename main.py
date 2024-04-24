@@ -20,13 +20,14 @@ class ynab_splitwise_transfer():
 
         # timestamps
         now = datetime.now(timezone.utc)
-        self.todays_midnight = datetime(now.year, now.month, now.day)
-        self.yesterdays_midnight = self.todays_midnight - timedelta(days=1)
-        self.logger.info(f"From: {self.yesterdays_midnight}; To: {self.todays_midnight}")
+        self.end_date = datetime(now.year, now.month, now.day)
+        self.sw_start_date = self.end_date - timedelta(days=1)
+        self.ynab_start_date = self.end_date - timedelta(days=3)
 
     def sw_to_ynab(self):
         self.logger.info("Moving transactions from Splitwise to YNAB...")
-        expenses = self.sw.get_expenses(dated_after=self.yesterdays_midnight, dated_before=self.todays_midnight)
+        self.logger.info(f"Getting all Splitwise expenses from {self.sw_start_date} to {self.end_date}")
+        expenses = self.sw.get_expenses(dated_after=self.sw_start_date, dated_before=self.end_date)
 
         if expenses:
             # process
@@ -127,13 +128,16 @@ class ynab_splitwise_transfer():
         accounts = self.ynab.get_accounts(self.ynab_budget_id)
         
         for account in accounts['data']['accounts']:
-            account_id = self.ynab .get_account_id(self.ynab_budget_id, account['name'])
+            account_id = self.ynab.get_account_id(self.ynab_budget_id, account['name'])
             # get all transactions in last one day
-            response = self.ynab .get_transactions(self.ynab_budget_id, account_id, 
-                                                        since_date=self.yesterdays_midnight, 
-                                                        before_date=self.todays_midnight)
+            self.logger.info(f"Getting all YNAB transactions from {self.ynab_start_date} to {self.end_date}")
+            response = self.ynab.get_transactions(self.ynab_budget_id, account_id, 
+                                                        since_date=self.ynab_start_date, 
+                                                        before_date=self.end_date)
             for transaction in response['data']['transactions']:
                 # check the memo for 'splitwise' keyword
+                if not transaction['memo']:
+                    continue
                 memo = transaction['memo'].lower()
                 if 'splitwise' in memo and not 'added to splitwise' in memo:
                     transaction_friends = transaction['memo'].split('with')[1].strip()
