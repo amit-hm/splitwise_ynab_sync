@@ -81,6 +81,10 @@ class YNABClient:
             reverse=True
         )[0]
         return last_transaction
+    
+    def update_transaction(self, budget_id, transaction_id, transaction_data):
+        endpoint = f"budgets/{budget_id}/transactions/{transaction_id}"
+        return self._make_request("PATCH", endpoint, data=transaction_data)
 
 
 if __name__ == "__main__":
