@@ -22,7 +22,7 @@ class ynab_splitwise_transfer():
         now = datetime.now(timezone.utc)
         self.end_date = datetime(now.year, now.month, now.day)
         self.sw_start_date = self.end_date - timedelta(days=1)
-        self.ynab_start_date = self.end_date - timedelta(days=3)
+        self.ynab_start_date = self.end_date - timedelta(days=7)
 
     def sw_to_ynab(self):
         self.logger.info("Moving transactions from Splitwise to YNAB...")
@@ -130,7 +130,7 @@ class ynab_splitwise_transfer():
         for account in accounts['data']['accounts']:
             account_id = self.ynab.get_account_id(self.ynab_budget_id, account['name'])
             # get all transactions in last one day
-            self.logger.info(f"Getting all YNAB transactions from {self.ynab_start_date} to {self.end_date}")
+            self.logger.info(f"Getting all {account['name']} transactions from {self.ynab_start_date} to {self.end_date}")
             response = self.ynab.get_transactions(self.ynab_budget_id, account_id, 
                                                         since_date=self.ynab_start_date, 
                                                         before_date=self.end_date)
