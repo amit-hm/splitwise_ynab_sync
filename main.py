@@ -80,7 +80,8 @@ class ynab_splitwise_transfer():
             update_transaction = {'transaction': transaction}
             self.ynab.update_transaction(self.ynab_budget_id, transaction['id'], update_transaction)
         
-        def update_splitwise(transaction_friends, amount):
+        def update_splitwise(transaction, transaction_friends):
+            amount = transaction['amount']
             category1_amount = amount/(len(transaction_friends) + 1) * 100
             expense_friends_ids = []
             sw_friends, sw_friends_ids = self.sw.get_friends()      # get all friends list from Splitwise
@@ -92,7 +93,7 @@ class ynab_splitwise_transfer():
             total_amount = -amount/1000
             expense = {
                     'cost': total_amount,
-                    'date': transaction['date'],
+                    'date': self.sw_start_date.strftime('%Y-%m-%d %H:%M:%S'),
                     'description': transaction['payee_name'],
                     'users': []
             }
@@ -144,7 +145,7 @@ class ynab_splitwise_transfer():
                     transaction_friends = extract_names(transaction_friends)
                     
                     # update Splitwise
-                    expense, error = update_splitwise(transaction_friends, transaction['amount'])
+                    expense, error = update_splitwise(transaction, transaction_friends)
 
                     # update YNAB
                     if expense and not error:
