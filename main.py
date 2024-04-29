@@ -93,7 +93,7 @@ class ynab_splitwise_transfer():
             total_amount = -amount/1000
             expense = {
                     'cost': total_amount,
-                    'date': self.sw_start_date.strftime('%Y-%m-%d %H:%M:%S'),
+                    'date': self.end_date.strftime('%Y-%m-%d %H:%M:%S'),
                     'description': transaction['payee_name'],
                     'users': []
             }
