@@ -27,9 +27,12 @@ class SW():
             friends_ids.append(id)
         return friends_fullnames, friends_ids
 
-    def get_expenses(self, dated_before=None, dated_after=None):
+    def get_expenses(self, dated_before=None, dated_after=None, use_update: bool=False):
         # get all expenses between 2 dates
-        expenses = self.sw.getExpenses(limit=self.limit, dated_before=dated_before, dated_after=dated_after)
+        if use_update:
+            expenses = self.sw.getExpenses(limit=self.limit, updated_before=dated_before, updated_after=dated_after)
+        else:
+            expenses = self.sw.getExpenses(limit=self.limit, dated_before=dated_before, dated_after=dated_after)
         owed_expenses = []
         for expense in expenses:
             owed_expense = {}

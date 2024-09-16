@@ -8,7 +8,8 @@ from utils import setup_environment_vars, combine_names
 
 class ynab_splitwise_transfer():
     def __init__(self, sw_consumer_key, sw_consumer_secret,sw_api_key, 
-                    ynab_personal_access_token, ynab_budget_name, ynab_account_name) -> None:
+                    ynab_personal_access_token, ynab_budget_name, ynab_account_name,
+                 use_update_date: bool=False) -> None:
         self.sw = SW(sw_consumer_key, sw_consumer_secret, sw_api_key)
         self.ynab = YNABClient(ynab_personal_access_token)
 
@@ -24,10 +25,14 @@ class ynab_splitwise_transfer():
         self.sw_start_date = self.end_date - timedelta(days=1)
         self.ynab_start_date = self.end_date - timedelta(days=7)
 
+        self.use_update_date = use_update_date
+
     def sw_to_ynab(self):
         self.logger.info("Moving transactions from Splitwise to YNAB...")
         self.logger.info(f"Getting all Splitwise expenses from {self.sw_start_date} to {self.end_date}")
-        expenses = self.sw.get_expenses(dated_after=self.sw_start_date, dated_before=self.end_date)
+        expenses = self.sw.get_expenses(dated_after=self.sw_start_date,
+                                        dated_before=self.end_date,
+                                        use_update=self.use_update_date)
 
         if expenses:
             # process
@@ -168,9 +173,13 @@ if __name__=="__main__":
     ynab_account_name = os.environ.get('ynab_account_name')
     ynab_personal_access_token = os.environ.get('ynab_personal_access_token')
 
+    # Config Options
+    use_update_date = os.environ.get('sync_update_date', 'false').lower() == 'true'
+
     a = ynab_splitwise_transfer(sw_consumer_key, sw_consumer_secret,
                                 sw_api_key, ynab_personal_access_token,
-                                ynab_budget_name, ynab_account_name)
+                                ynab_budget_name, ynab_account_name,
+                                use_update_date=use_update_date)
 
     # splitwise to ynab
     a.sw_to_ynab()
