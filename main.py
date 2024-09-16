@@ -55,7 +55,8 @@ class ynab_splitwise_transfer():
 
     def ynab_to_sw(self):
         def extract_names(s):
-            s = s.replace('and', ',').replace(' ', '')
+            # Make sure we surround "and" with spaces so that we don't replace names with "and" in them
+            s = s.replace(' and ', ',').replace(' ', '')
             names = s.split(',')
             return names
         
@@ -141,8 +142,13 @@ class ynab_splitwise_transfer():
                     continue
                 memo = transaction['memo'].lower()
                 if 'splitwise' in memo and not 'added to splitwise' in memo:
-                    transaction_friends = transaction['memo'].split('with')[1].strip()
-                    transaction_friends = extract_names(transaction_friends)
+                    # transaction_friends = transaction['memo'].split('with')[1].strip()
+                    # Use "with" keyword to imply splitting.
+                    # Handle the case where "with" isn't inside the memo, or friends were not noted properly.
+                    # Also surround 'with' by spaces so that we don't replace names with 'with' in them
+                    memo_split_string = ' '.join(transaction.get('memo', '').split(' with ')[1:]).strip()
+
+                    transaction_friends = extract_names(memo_split_string)
                     
                     # update Splitwise
                     expense, error = update_splitwise(transaction, transaction_friends)
