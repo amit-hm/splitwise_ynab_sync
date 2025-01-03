@@ -27,7 +27,7 @@ class ynab_splitwise_transfer():
     def sw_to_ynab(self):
         self.logger.info("Moving transactions from Splitwise to YNAB...")
         self.logger.info(f"Getting all Splitwise expenses from {self.sw_start_date} to {self.end_date}")
-        expenses = self.sw.get_expenses(dated_after=self.sw_start_date, dated_before=self.end_date)
+        expenses = self.sw.get_expenses(updated_after=self.sw_start_date, updated_before=self.end_date)
 
         if expenses:
             # process
