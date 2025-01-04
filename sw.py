@@ -52,6 +52,7 @@ class SW():
                         owed_expense['updated_time'] = expense.getUpdatedAt()
                         owed_expense['deleted_time'] = expense.getDeletedAt()
                         owed_expense['description'] = description
+                        owed_expense['repeat'] = expense.isRepeat()
                         owed_expense['cost'] = expense_cost
                         is_append = True
                 else:       # get user names other than current_user
